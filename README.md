@@ -2,7 +2,7 @@
 
 This repositorie gather all custom codes used during my M2 internship in GirardeauLab. All codes are using the FMA toolbox available at : http://fmatoolbox.sourceforge.net/
 
-Codes are divided in 4 main folders
+Codes are divided in 4 main folders. Function runs in a single session est saves their output in each session. FunctionAll checks in all session whether data from the first first function have been produced in order to reunite them and make statistics.
 
 ## Signal Analysis
 This folder contains code relative to the analysis of LFPs. 
