@@ -13,5 +13,5 @@ This folder contains code relative to the analysis of neuronal activity
 ## Behavior
 This folder contains code relative to behavioral data. Like speed and position of the rat
 
-## Miscleaneous 
+## Miscellaneous 
 This folder contains code usefull for the other three folders
