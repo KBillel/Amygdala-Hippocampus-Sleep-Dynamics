@@ -24,7 +24,6 @@ if 1==1
     spks.all = spks.all((ismember(spks.all(:,2:3),unique(pairs(:,3:4),'rows'),'rows') | ismember(spks.all(:,2:3),unique(pairs(:,5:6),'rows'),'rows')),:);
     spks.all = SpksId(spks.all);
 
-
     if isempty(pairs)
         return;
     end

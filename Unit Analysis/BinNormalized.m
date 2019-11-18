@@ -80,6 +80,7 @@ idx = unique(spks_type_str(:,4));
 %     %For each neurons, bin spikes from strat to stop of transition
 %     %epoch
 % end
+
 for i = 1:length(idx)
         binned.metadata = [binned.metadata ; [rat jour unique(spks_type_str(spks_type_str(:,4) == idx(i),2:4),'rows') type]];
     for j = 1:size(events,1)
@@ -99,9 +100,11 @@ for i = 1:length(idx)
         REM_Activity = Bin(spks_type_str(spks_type_str(:,4)==idx(i),1),[events(j,3) events(j,4)],nREM,'trim')';
         REM_Activity(isnan(REM_Activity)) = [];
         REM_FR = Accumulate(REM_Activity)/REM_L;
+        
         if length(REM_FR)~= nREM
             REM_FR(length(REM_FR)+1:nREM,1) = 0;
         end
+        
         binned.activity(:,i,j) = [SWS_FR' REM_FR'];
     end
 end

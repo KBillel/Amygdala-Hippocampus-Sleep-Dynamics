@@ -2,6 +2,8 @@ function [binned events] = NREM_REM_NREM(session,str,type,keep)
 %Author : Khouader Billel
 %BinNormalized : This function returns binned spikes for an entire
 %session with metadata for strct you want. 
+
+% EN COURS : Ajouter calcul power fq
  
 type_name = type;
 str_name = str;
@@ -71,11 +73,17 @@ for i=1:length(sws(:,1))
 end
 
 
+
+power = [];
+
 binned = [];
 binned.activity = [];
+binned.power = [];
+binned.remlength=[];
 binned.metadata = [];
 binned.metadatastr = ["Rat" "Jour" "Shank" "N" "Id" "Type"];
 idx = unique(spks_type_str(:,4));
+binned.power = [];
 % [~,t] = binspikes(spks_pyr_str(spks_pyr_str(:,4)==idx(1),1),10,[0 tstop]);
 % 
 % for i = 1:length(idx)
@@ -119,14 +127,34 @@ for i = 1:length(idx)
         end
         
         binned.activity(:,i,j) = [SWS_FR' REM_FR' SWS_FR2'];
+        
     end
 end
+
+for j = 1:size(events,1)
+    lfp = GetLFP(str2double(GetRippleChannel),'restrict',[events(j,3) events(j,4)]);
+    [spectre,f] = MTSpectrum(Detrend(lfp),'range',[0 100]);
+
+    binned.power = [binned.power ; spectre];
+    binned.f = f;
+    binned.remlength = [binned.remlength ;events(j,4)-events(j,3)];
+end
+
+binned.swsPower = [];
+for i = 1:size(sws,1)
+    lfp = GetLFP(str2double(GetRippleChannel),'restrict',[sws(i,1) sws(i,2)]);
+    [spectre,f] = MTSpectrum(Detrend(lfp),'range',[0 100]);
+    binned.swsPower = [binned.swsPower ; spectre];
+end
+
+[z, mu,std] = zscore(binned.swsPower);
+binned.remPower = (binned.power-mu)./std;
 
 if keep == 1
     mkdir('Billel/Transitions')
     cd('Billel/Transitions')
 
-    save(['NREM_REM_NREM_' str_name '_' type_name],'binned','events')
+    save(['NREM_REM_NREM_FQ_' str_name '_' type_name],'binned','events')
 end
 
 
