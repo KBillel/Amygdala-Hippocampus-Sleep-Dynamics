@@ -1,0 +1,25 @@
+basal_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\basal_pyr.batch');
+blv_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\blv_pyr.batch');
+bma_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\bma_pyr.batch');
+bmp_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\bmp_pyr.batch');
+cecm_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\cecm_pyr.batch');
+cpu_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\cpu_pyr.batch');
+den_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\den_pyr.batch');
+gp_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\gp_pyr.batch');
+ladl_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\ladl_pyr.batch');
+olfact_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\olfact_pyr.batch');
+pir_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\pir_pyr.batch');
+ven_pyr = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\ven_pyr.batch');
+
+basale_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\basale_int.batch');
+blv_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\blv_int.batch');
+bma_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\bma_int.batch');
+bmp_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\bmp_int.batch');
+cecm_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\cecm_int.batch');
+cpu_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\cpu_int.batch');
+den_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\den_int.batch');
+gp_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\gp_int.batch');
+ladl_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\ladl_int.batch');
+olfact_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\olfact_int.batch');
+pir_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\pir_int.batch');
+ven_int = StartBatch('NREM_REM_NREM','Z:\Matlab\Billel_Script\Batch\NREM-REM-NREM\ven_int.batch');

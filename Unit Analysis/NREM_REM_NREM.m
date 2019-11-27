@@ -13,7 +13,7 @@ end
 
 
 nSWS = 30;
-nREM = 10;
+nREM = 12;
 
 load('D:\Matlab\Billel\indexing.mat')
 index = ratsessionindex(xmlpath == session,:);
@@ -41,15 +41,21 @@ spks = SpksId(spks);
 %rename the neurons with easier indexing
 
 
-str_spks = spks(ismember(spks(:,2),str(str(:,1)==rat & str(:,2)==jour,3),'rows'),:);
-%Only keep spks that are in the structures we care
+%In finalType only keep neurons with good [Rat Jour Type] & [Shank] in the
+%right str.
+if size(str,2)==4
+    type_str = finalType(ismember(finalType(:,[1 2 5]),[rat jour type],'rows') & ismember(finalType(:,3:4),str(str(:,1)==rat & str(:,2)==jour,3:4),'rows'),:);
+else
+    type_str = finalType(ismember(finalType(:,[1 2 5]),[rat jour type],'rows') & ismember(finalType(:,3),str(str(:,1)==rat & str(:,2)==jour,3),'rows'),:);
+end
 
-finalType_type = finalType(ismember(finalType(:,[1 2 5]),[rat jour type],'rows'),:);
-finalType_type_str = finalType_type(ismember(finalType_type(:,3),str_spks(:,2),'rows'),:);
-%In final type, only keep neurons from str and the right type.
+%Only keep spks from cells in type_str.
+spks_type_str = spks(ismember(spks(:,2:3),type_str(:,3:4),'rows'),:);
 
-spks_type_str = spks(ismember(spks(:,2:3),finalType_type_str(:,3:4),'rows'),:);
-%In spks only keep neurons in the CleanFinalType (Str and Type)
+if isempty(spks_type_str)
+    return
+end
+
 tstop = spks_type_str(end,1);
 
 events = [];
@@ -68,6 +74,10 @@ for i=1:length(sws(:,1))
             end
         end  
     end  
+end
+
+if isempty(events)
+    return
 end
 
 

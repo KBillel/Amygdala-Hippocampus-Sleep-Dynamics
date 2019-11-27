@@ -4,6 +4,7 @@ function [] = ThetaMod(session,channel_HPC,channel_BLA)
     rat = index(1);
     jour = index(2);
     
+    
 
     load('Z:\All-Rats\Structures\structures.mat')
     load('Z:\All-Rats\AllRats-FinalType.mat')
@@ -34,17 +35,27 @@ function [] = ThetaMod(session,channel_HPC,channel_BLA)
     spks.rem = spks.rem(spks.rem(:,1)<lfp.hpc.rem(end,1),:);
     spks.rem = spks.rem(spks.rem(:,1)<lfp.bla.rem(end,1),:);
     
-
-
     [phase.hpc,amplitude.hpc,unwrapped.hpc] = Phase(FilterLFP(lfp.hpc.rem),spks.rem(:,1));
     [dist.hpc,binned.hpc,stats.hpc] = CircularDistribution(phase.hpc(:,2),'groups',spks.rem(:,4));
- 
+    dist.hpc = [];
+    binned.hpc = [];
+    stats.hpc = [];
     [phase.bla,amplitude.bla,unwrapped.bla] = Phase(FilterLFP(lfp.bla.rem),spks.rem(:,1));
     [dist.bla,binned.bla,stats.bla] = CircularDistribution(phase.bla(:,2),'groups',spks.rem(:,4));
     
     n = length(unique(spks.rem(:,2:4)));
     metadata = [repmat(rat,n,1) repmat(jour,n,1) unique(spks.rem(:,2:4),'rows')];
-     
+    
+    if rat == 9
+        phase.hpc = [];
+        amplitude.hpc = [];
+        unwrapped.hpc = [];
+        dist.hpc = [];
+        binned.hpc=[];
+        stats.hpc=[];
+    end
+    
+    
     save('ThetaMod','phase' ,'amplitude' ,'unwrapped' ,'dist' ,'binned' ,'stats','metadata')   
 end
 
