@@ -1,5 +1,4 @@
-function [] = NREM_REM_NREM_Plot(input,str)
-
+function [] = Plot_NREM_REM_NREM(input,str)
     activity_pyr = input.activity(strcmpi(input.region,str)& strcmpi(input.type,"pyr"),:);
     activity_int = input.activity(strcmpi(input.region,str)& strcmpi(input.type,"int"),:);
 
