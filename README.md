@@ -15,3 +15,7 @@ This folder contains code relative to behavioral data. Like speed and position o
 
 ## Miscellaneous 
 This folder contains code usefull for the other three folders
+
+
+
+In all of those folder you can find code for session, for all sessions and in order to plot the data.
