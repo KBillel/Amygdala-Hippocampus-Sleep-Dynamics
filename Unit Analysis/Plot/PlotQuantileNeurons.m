@@ -1,7 +1,7 @@
-function [quantiled] = PlotQuantileNeurons(input,str,show,L)
+function [quantiled] = PlotQuantileNeurons(input,str,rat,show,L)
 
-    pyr = strcmpi(input.region,str)& strcmpi(input.type,"pyr");
-    int = strcmpi(input.region,str)& strcmpi(input.type,"int");
+    pyr = strcmpi(input.region,str)& strcmpi(input.type,"pyr") ;%& input.metadata(:,1) == rat ;
+    int = strcmpi(input.region,str)& strcmpi(input.type,"int") ;%& input.metadata(:,1) == rat;
     
     neurons.activity_pyr = input.activity(pyr,:);
     neurons.activity_int = input.activity(int,:);
@@ -19,8 +19,10 @@ function [quantiled] = PlotQuantileNeurons(input,str,show,L)
         quantiled{i}.activity = neurons.activity_pyr(neurons.sum>q(i) & neurons.sum<q(i+1),:);
         quantiled{i}.metadata = neurons.metadata_pyr(neurons.sum>q(i) & neurons.sum<q(i+1),:);
         quantiled{i}.FR = [q(i) q(i+1)]/L;
+        disp(quantiled{i}.FR)
         quantiled{i}.norm = mean(mean(quantiled{i}.activity(:,20:30)));
     end
+    
     
     if show == 'on'
         figure;
@@ -33,7 +35,18 @@ function [quantiled] = PlotQuantileNeurons(input,str,show,L)
         ylabel('Firing rates')
         legend('interneurons','1','2','3','4','5')
         
-
+        figure;
+        hold;
+        set(gca ,'yscale', 'log')
+        plot(mean(neurons.activity_int));
+        for i = 1:(length(q)-1)
+            plot(mean(quantiled{i}.activity));
+        end
+        xlabel('Time Normalized')
+        ylabel('Firing rates')
+        legend('interneurons','1','2','3','4','5')
+        
+        
     end
 end
 

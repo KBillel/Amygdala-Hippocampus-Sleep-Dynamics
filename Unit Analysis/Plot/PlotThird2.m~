@@ -30,24 +30,18 @@ disp(p_int)
 
 %%%%%% Plots
 figure;
-int = figure;
-d = [inputint.third(:,1) inputint.third(:,3)];
-violin(d);
-ylim([-2 2])
-title([str  'int neurons n = ' num2str(n_int) ' and p = ' num2str(p_int)])
-pyr = figure;
-pyr.PaperPositionMode = 'auto'
+figure;
 d = [inputpyr.third(:,1) inputpyr.third(:,3)];
 violin(d);
 ylim([-2 2])
 title([str  'pyr neurons n = ' num2str(n_pyr) ' and p = ' num2str(p_pyr)])
+figure;
+d = [inputint.third(:,1) inputint.third(:,3)];
+violin(d);
+ylim([-2 2])
+title([str  'int neurons n = ' num2str(n_int) ' and p = ' num2str(p_int)])
 
-
-
-if keep == 1;
-    saveas(pyr,[str 'pyr'],'svg')
-    saveas(int,[str 'int'],'svg')
-end
+if keep = 1;
     
 
 

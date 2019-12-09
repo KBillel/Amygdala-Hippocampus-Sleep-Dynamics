@@ -37,4 +37,10 @@ function plot0(x,y,name)
     title(name)
 end
 
+% function plot1(x,y,name)
+%     figure;
+%     hold
+%     scatter()
+% end
+
 
