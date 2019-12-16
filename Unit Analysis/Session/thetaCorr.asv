@@ -1,0 +1,24 @@
+function [corrM]  = thetaCorr(session)
+
+    load('D:\Matlab\Billel\indexing.mat')
+    load('Z:\All-Rats\Structures\structures.mat')
+    
+    index = ratsessionindex(xmlpath == session,:);
+    rat = index(1);
+    jour = index(2);
+    session = char(session);
+    
+    cd(session)
+    SetCurrentSession([session '\' session(end-13:end) '.xml']);
+    load('States.mat')
+    
+    
+    spks.all = GetSpikes('output','full');
+    spks.all = SpksId(spks.all);
+    
+    lfp.rem = GetLFP(GetRippleChannel,'restrict',[Rem(1,1)+10 Rem(1,1)+25]);
+    
+    [peaks,troughs] = DetectOscillationPeaks(lfp.rem);
+
+
+end

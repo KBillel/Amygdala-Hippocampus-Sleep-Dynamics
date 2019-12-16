@@ -18,7 +18,6 @@ function [binned events] = NREM(session,str,type,keep)
     load('Z:\All-Rats\Structures\structures.mat')
     str = eval(str);
     
-    load('Z:\All-Rats\Structures\structures.mat')
     load('Z:\All-Rats\AllRats-FinalType.mat')
 
     cd(session)
