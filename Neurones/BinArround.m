@@ -13,7 +13,7 @@ if nargin < 1 | mod(length(varargin),2) ~= 0,
 end
 
 nBins = 1;
-binSize = 0.05;
+binSize = 0.025;
 fBin = 1/binSize;
 
 for i = 1:2:length(varargin)

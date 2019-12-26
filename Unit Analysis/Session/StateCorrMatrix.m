@@ -1,4 +1,4 @@
-function [outputArg1,outputArg2] = StateCorrMatrix(session,str,pre,post,binSize)
+function [CorrMatrix] = StateCorrMatrix(session,str,pre,post,binSize)
 %STATECORRMATRIX Calculate CorrMatrix between str and hpc for differente
 %brain state and save them in a variable
 %CorrMatrix
@@ -8,8 +8,6 @@ function [outputArg1,outputArg2] = StateCorrMatrix(session,str,pre,post,binSize)
 %       -run/runPeaks/runTroughs
 %   - post
 %       -theta/thetaPeaks/thetaTroughs
-
-    
 
     load('D:\Matlab\Billel\indexing.mat')
     load('Z:\All-Rats\Structures\structures.mat')
@@ -32,11 +30,11 @@ function [outputArg1,outputArg2] = StateCorrMatrix(session,str,pre,post,binSize)
     
     % Load LFP and get detect peaks and troughs.
     lfp.all.rem = GetLFP(GetRippleChannel,'restrict',Rem);
-    lfp.pre.rem = Restrict(lfp.all.rem(presleep));
-    lfp.post.rem = Restrict(lfp.all.rem(postsleep));
+    lfp.pre.rem = Restrict(lfp.all.rem,presleep);
+    lfp.post.rem = Restrict(lfp.all.rem,postsleep);
     
-    [peaks.pre,troughs.pre] = DetectOscillationPeaks(lfp.rem.pre);
-    [peaks.post,troughs.post] = DetectOscillationPeaks(lfp.rem.post);
+    [peaks.pre,troughs.pre] = DetectOscillationPeaks(lfp.pre.rem);
+    [peaks.post,troughs.post] = DetectOscillationPeaks(lfp.post.rem);
     
     % Load str.
     str = eval(str);
@@ -71,20 +69,21 @@ function [outputArg1,outputArg2] = StateCorrMatrix(session,str,pre,post,binSize)
     [binMatrix.hpc.pre.rem.troughs] = zscore(BinArround(spks.hpc.pre.rem,troughs.pre.times(:,1)),0,2);
     [binMatrix.hpc.run] = zscore(SpikeTrain([spks.hpc.run(:,1) spks.hpc.run(:,4)],binSize,[run(1,1) run(end,end)])',0,2);
     [binMatrix.hpc.post.rem.peaks] = zscore(BinArround(spks.hpc.post.rem,peaks.post.times(:,1)),0,2);
-    [binMatrix.hpc.post.rem.troughs = zscore(BinArround(spks.hpc.post.rem,troughs.post.times(:,1)),0,2);
+    [binMatrix.hpc.post.rem.troughs] = zscore(BinArround(spks.hpc.post.rem,troughs.post.times(:,1)),0,2);
         
     %STR:
     [binMatrix.str.pre.rem.peaks] = zscore(BinArround(spks.str.pre.rem,peaks.pre.times(:,1)),0,2);
     [binMatrix.str.pre.rem.troughs] = zscore(BinArround(spks.str.pre.rem,troughs.pre.times(:,1)),0,2);
     [binMatrix.str.run] = zscore(SpikeTrain([spks.str.run(:,1) spks.str.run(:,4)],binSize,[run(1,1) run(end,end)])',0,2);
     [binMatrix.str.post.rem.peaks] = zscore(BinArround(spks.str.post.rem,peaks.post.times(:,1)),0,2);
-    [binMatrix.str.post.rem.troughs = zscore(BinArround(spks.str.post.rem,troughs.post.times(:,1)),0,2);
+    [binMatrix.str.post.rem.troughs] = zscore(BinArround(spks.str.post.rem,troughs.post.times(:,1)),0,2);
     
-    [CorrMatrix.pre.rem.peaks.matrix,CorrMatrix.pre.peaks.pval] = corr(binMatrix.hpc.pre.rem.peaks,binMatrix.str.pre.rem.peaks);
-    [CorrMatrix.pre.rem.troughs.matrix,CorrMatrix.pre.troughs.pval] = corr(binMatrix.hpc.pre.rem.troughs,binMatrix.str.pre.rem.troughs);
+    [CorrMatrix.pre.rem.peaks.matrix,CorrMatrix.pre.rem.peaks.pval] = corr(binMatrix.hpc.pre.rem.peaks',binMatrix.str.pre.rem.peaks');
+    [CorrMatrix.pre.rem.troughs.matrix,CorrMatrix.pre.rem.troughs.pval] = corr(binMatrix.hpc.pre.rem.troughs',binMatrix.str.pre.rem.troughs');
     [CorrMatrix.run.rem.matrix,CorrMatrix.run.pval] = corr(binMatrix.hpc.run',binMatrix.str.run');
-    [CorrMatrix.post.rem.peaks.matrix,CorrMatrix.post.peaks.pval] = corr(binMatrix.hpc.post.rem.peaks,binMatrix.str.post.rem.peaks);
-    [CorrMatrix.post.rem.troughs.matrix,CorrMatrix.post.troughs.pval] = corr(binMatrix.hpc.post.rem.troughs,binMatrix.str.post.rem.troughs);
+    [CorrMatrix.post.rem.peaks.matrix,CorrMatrix.post.rem.peaks.pval] = corr(binMatrix.hpc.post.rem.peaks',binMatrix.str.post.rem.peaks');
+    [CorrMatrix.post.rem.troughs.matrix,CorrMatrix.post.rem.troughs.pval] = corr(binMatrix.hpc.post.rem.troughs',binMatrix.str.post.rem.troughs');
+
 end
     
 
