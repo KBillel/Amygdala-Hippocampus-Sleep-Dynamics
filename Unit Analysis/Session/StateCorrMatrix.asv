@@ -88,11 +88,7 @@ function [CorrMatrix] = StateCorrMatrix(session,str,pre,post,binSize)
     [CorrMatrix.post.rem.peaks.matrix,CorrMatrix.post.rem.peaks.pval] = corr(binMatrix.hpc.post.rem.peaks',binMatrix.str.post.rem.peaks');
     [CorrMatrix.post.rem.troughs.matrix,CorrMatrix.post.rem.troughs.pval] = corr(binMatrix.hpc.post.rem.troughs',binMatrix.str.post.rem.troughs');
 
-    if keep == 1
-        mkdir('Billel/CorrMatrix')
-        cd('Billel/CorrMatrix')
-        save(['CorrMatrix' str '_' binSize],'CorrMatrix')
-    end
+    
     
 end
     

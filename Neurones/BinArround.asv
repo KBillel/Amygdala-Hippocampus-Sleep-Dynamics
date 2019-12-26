@@ -4,9 +4,9 @@ function [activity] = BinArround(spks,times,varargin)
 % =========================================================================
 %     Properties    Values
 %    ----------------------------------------------------------------------
-%     'nBins'    Number of bins to be used
-%     'binSize'  Size of the bin to be used
-%     'nNeurons' Number of neurons in the spks variable.
+%     'nBins'   Number of bins to be used
+%     'binSize' Size of the bin to be used
+%     'n
 % =========================================================================
 
 if nargin < 1 | mod(length(varargin),2) ~= 0,
