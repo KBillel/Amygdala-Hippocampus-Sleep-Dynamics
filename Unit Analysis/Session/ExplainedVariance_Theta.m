@@ -1,4 +1,5 @@
-function [EV,REV,CorrMatrix] = ExplainedVariance_Theta(session,structure,pre,post,varargin)% Explained Variance_Ultimate - Calculates the explained variance and reverse explained variances for pre/run/post sessions (Kudrimoti 1999, Lansink 2009)
+function [EV,REV,CorrMatrix] = ExplainedVariance_Theta(session,structure,pre,post,varargin)
+% Explained Variance_Ultimate - Calculates the explained variance and reverse explained variances for pre/run/post sessions (Kudrimoti 1999, Lansink 2009)
 %  USAGE
 %
 %    [EV,REV,CorrMatrix] = ExplainedVariance_Theta(session,structure,pre,post,varargin)
