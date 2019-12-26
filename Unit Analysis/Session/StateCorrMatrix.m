@@ -51,7 +51,7 @@ for i = 1:2:length(varargin),
 	end
 	switch(lower(varargin{i})),
 		case 'binsize',
-			binsize = (varargin{i+1});
+			binSize = (varargin{i+1});
 		case 'savevar',
 			savevar = (varargin{i+1});
 		otherwise,
@@ -94,14 +94,14 @@ lfp.post.rem = Restrict(lfp.all.rem,postsleep);
 
 % Load str.
 str = eval(str);
-str = str(str(:,1)==rat,:);
-Hpc = Hpc(Hpc(:,1)==rat,:);
+str = str(str(:,1)==rat & str(:,2)==jour,:);
+Hpc = Hpc(Hpc(:,1)==rat & Hpc(:,2)==jour,:);
 
 % Load spikes and sort them pre/run/post
 spks.all = GetSpikes('output','full');
 
 %HPC
-spks.hpc.all = spks.all(ismember(spks.all(:,2:3),Hpc(:,2:3),'rows'),:);
+spks.hpc.all = spks.all(ismember(spks.all(:,2),Hpc(:,3),'rows'),:);
 spks.hpc.all = SpksId(spks.hpc.all);
 spks.hpc.pre.all = Restrict(spks.hpc.all,presleep); 
 spks.hpc.post.all = Restrict(spks.hpc.all,postsleep);
@@ -112,7 +112,7 @@ spks.hpc.run = Restrict(spks.hpc.all,run);
 nHPC = max(spks.hpc.all(:,4));
 
 %STR
-spks.str.all = spks.all(ismember(spks.all(:,2:3),str(:,2:3),'rows'),:);
+spks.str.all = spks.all(ismember(spks.all(:,2),str(:,3),'rows'),:);
 spks.str.all = SpksId(spks.str.all);
 spks.str.pre.all = Restrict(spks.str.all,presleep); 
 spks.str.post.all = Restrict(spks.str.all,postsleep);
@@ -129,7 +129,7 @@ nSTR = max(spks.str.all(:,4));
 [binMatrix.hpc.pre.rem.troughs] = zscore(BinArround(spks.hpc.pre.rem,troughs.pre.times(:,1),'nNeurons',nHPC,'binSize',binSize),0,2);
 [binMatrix.hpc.run] = zscore(SpikeTrain([spks.hpc.run(:,1) spks.hpc.run(:,4)],binSize,[run(1,1) run(end,end)],'nNeurons',nHPC)',0,2);
 [binMatrix.hpc.post.rem.peaks] = zscore(BinArround(spks.hpc.post.rem,peaks.post.times(:,1),'nNeurons',nHPC,'binSize',binSize),0,2);
-[binMatrix.hpc.post.rem.troughs] = zscore(BinArround(spks.hpc.post.rem,troughs.post.times(:,1),'nNeurons','binSize',binSize,nHPC),0,2);
+[binMatrix.hpc.post.rem.troughs] = zscore(BinArround(spks.hpc.post.rem,troughs.post.times(:,1),'nNeurons',nHPC,'binSize',binSize),0,2);
 
 %STR:
 [binMatrix.str.pre.rem.peaks] = zscore(BinArround(spks.str.pre.rem,peaks.pre.times(:,1),'nNeurons',nSTR,'binSize',binSize),0,2);
@@ -148,7 +148,7 @@ nSTR = max(spks.str.all(:,4));
 [EV.peaks,REV.peaks] = ExplainedVariance(CorrMatrix.run.matrix,CorrMatrix.pre.rem.peaks.matrix,CorrMatrix.post.rem.peaks.matrix);
 [EV.troughs,REV.troughs] = ExplainedVariance(CorrMatrix.run.matrix,CorrMatrix.pre.rem.troughs.matrix,CorrMatrix.post.rem.troughs.matrix);
 
-if savevar == 'on'
+if strcmpi(savevar,'on')
     mkdir('Billel/CorrMatrix')
     cd('Billel/CorrMatrix')
     save(['CorrMatrix' str '_' binSize],'CorrMatrix')

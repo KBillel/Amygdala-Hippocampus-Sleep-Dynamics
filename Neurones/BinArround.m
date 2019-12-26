@@ -29,7 +29,7 @@ for i = 1:2:length(varargin)
                 error('Incorrect value for property ''nBins'' (type ''help <a href="matlab:help BinArround">BinArround</a>'' for details).');
             end
         case 'binsize'
-            binSize = varargin{i+1}
+            binSize = varargin{i+1};
             if ~binSize>0
                 error('Incorrect value for property ''binSize'' (type ''help <a href="matlab:help BinArround">BinArround</a>'' for details).');
             end
