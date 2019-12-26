@@ -69,7 +69,7 @@ function [outputArg1,outputArg2] = StateCorrMatrix(session,str,pre,post,binSize)
     %HPC:  
     [binMatrix.hpc.pre.rem.peaks] = zscore(BinArround(spks.hpc.pre.rem,peaks.pre.times(:,1)),0,2);
     [binMatrix.hpc.pre.rem.troughs] = zscore(BinArround(spks.hpc.pre.rem,troughs.pre.times(:,1)),0,2);
-    [binMatrix.hpc.run] = zscore(SpikeTrain([spks.hpc.run(:,1) spks.hpc.run(:,4)],[run(1,1) run(end,end)])',0,2);
+    [binMatrix.hpc.run] = zscore(SpikeTrain([spks.hpc.run(:,1) spks.hpc.run(:,4)],binSize,[run(1,1) run(end,end)])',0,2);
     [binMatrix.hpc.post.rem.peaks] = zscore(BinArround(spks.hpc.post.rem,peaks.post.times(:,1)),0,2);
     [binMatrix.hpc.post.rem.troughs = zscore(BinArround(spks.hpc.post.rem,troughs.post.times(:,1)),0,2);
         
