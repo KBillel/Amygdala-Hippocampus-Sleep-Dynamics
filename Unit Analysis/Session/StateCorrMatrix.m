@@ -67,11 +67,14 @@ index = ratsessionindex(xmlpath == session,:);
 rat = index(1);
 jour = index(2);
 session = char(session);
+str_name = str;
 
 cd(session)
 
-if exist(['Billel/CorrMatrix' str '_' binSize])
-    load(['Billel/CorrMatrix' str '_' binSize])
+if exist(['Billel/CorrMatrix/CorrMatrix' str_name '_' num2str(binSize) '.mat'])
+    load(['Billel/CorrMatrix/CorrMatrix' str_name '_' num2str(binSize) '.mat'])
+    [EV.peaks,REV.peaks] = ExplainedVariance(CorrMatrix.run.matrix,CorrMatrix.pre.rem.peaks.matrix,CorrMatrix.post.rem.peaks.matrix);
+    [EV.troughs,REV.troughs] = ExplainedVariance(CorrMatrix.run.matrix,CorrMatrix.pre.rem.troughs.matrix,CorrMatrix.post.rem.troughs.matrix)
     return
 end
 
@@ -151,7 +154,7 @@ nSTR = max(spks.str.all(:,4));
 if strcmpi(savevar,'on')
     mkdir('Billel/CorrMatrix')
     cd('Billel/CorrMatrix')
-    save(['CorrMatrix' str '_' binSize],'CorrMatrix')
+    save(['CorrMatrix' str_name '_' num2str(binSize) '.mat'],'CorrMatrix')
 end
 
 end
