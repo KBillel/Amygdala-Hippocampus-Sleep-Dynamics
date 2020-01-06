@@ -12,7 +12,7 @@ function [peaks,troughs] = DetectOscillationPeaks(lfp,varargin)
 % Defaults
 
 bandwidth = [4 8];
-
+show = 'off';
 if nargin < 1 | mod(length(varargin),2) ~= 0,
     error('Incorrect number of parameters (type ''help <a href="matlab:help DetectOscillationsPeaks">MTSpectrogrampt</a>'' for details).');
 end
@@ -27,6 +27,8 @@ for i = 1:2:length(varargin)
             if size(bandwidth)~= 2 
                 error('Incorrect value for property ''bandwith'' (type ''help <a href="matlab:help DetectOscillationPeaks">MTSpectrogram</a>'' for details).');
             end
+        case 'show'
+            show = varargin{i+1};
         otherwise
             error(['Unknown property ''' num2str(varargin{i}) ''' (type ''help <a href="matlab:help DetectOscillationPeaks">MTSpectrogrampt</a>'' for details).']);
     end
@@ -125,12 +127,14 @@ phase_troughs = [phase_peaks(:,1) mod(phase_peaks(:,2)+pi,2*pi)];
 dPhase_troughs = [0 ;diff(phase_troughs(:,2))];
 troughs.times = [filtered_lfp(dPhase_troughs<-2*std(dPhase_troughs),1) filtered_lfp(dPhase_troughs<-2*std(dPhase_troughs),2)];
 
-figure;
-PlotXY(filtered_lfp);
-hold
-plot(peaks.times(:,1),peaks.times(:,2),'o','col','red')
-plot(troughs.times(:,1),troughs.times(:,2),'o','col','green')
-plot(phase_peaks(:,1),phase_peaks(:,2)*100+200);
+if strcmpi(show,'on')
+    figure;
+    PlotXY(filtered_lfp);
+    hold
+    plot(peaks.times(:,1),peaks.times(:,2),'o','col','red')
+    plot(troughs.times(:,1),troughs.times(:,2),'o','col','green')
+    plot(phase_peaks(:,1),phase_peaks(:,2)*100+200);
+end
 
 
 % 
