@@ -43,7 +43,7 @@ end
 
 savevar = 'off';
 binSize = 0.025;
-force = false;
+force = true;
 
 % Parse options
 for i = 1:2:length(varargin),

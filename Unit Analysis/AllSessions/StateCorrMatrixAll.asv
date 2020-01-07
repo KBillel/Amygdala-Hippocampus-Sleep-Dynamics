@@ -8,8 +8,7 @@ function [EV, REV] = StateCorrMatrixAll(str_name,binSize)
     StateCorrMatrix.metadata.session = [];
     StateCorrMatrix.metadata.binSize = binSize;
     StateCorrMatrix.metadata.str = str_name;
-    
-    excluded = 0
+
     for i = 1:size(xmlpath,1)
         cd(xmlpath(i))
         if exist(file_path)
@@ -30,7 +29,7 @@ function [EV, REV] = StateCorrMatrixAll(str_name,binSize)
          disp(['CorrMatrix' str_name '_' num2str(binSize) '.mat could not be found in any session. Check that StateCorrMatrix has been run with those parameters']);
     else
         disp(size(StateCorrMatrix.data,1)+ " Sessions were loaded")
-        disp(excluded + " sessions were excluded because not enough cells inside")
+        disp()
     end
 
     EV.peaks = [];
