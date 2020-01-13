@@ -127,10 +127,10 @@ if strcmpi(str_name,'all')
     corrMatrix = {};
     for i = 1:size(binMatrix,1)
         corrMatrix{i,1} = binMatrix{i,1};
-        [corrMatrix{i,2}, corrMatrix{i,3}] = corr(binMatrix{i,2}');
+        [corrMatrix{i,2} corrMatrix{i,3}] = corr(binMatrix{i,2}');
     end
     
-    corrMatrix = cell2table(corrMatrix,'VariableNames',["Names" "Corr" "pVal"]);
+    rownames = corrMatrix();
     
     if strcmpi(savevar,'on')
         disp(['SAVING CorrMatrixAll_' num2str(binSize) '.mat'])
