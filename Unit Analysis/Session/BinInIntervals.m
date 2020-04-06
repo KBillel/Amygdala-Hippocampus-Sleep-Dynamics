@@ -60,21 +60,25 @@ function [binMatrix] = BinInIntervals(spks,intervals,varargin)
         end
     end
     
-    binMatrix = cell(size(intervals,1),2);
     nNeurons = max(spks(:,4));
-    
-    for i = 1:size(intervals,1)
-        interval = intervals{i,2};
-        spksi = Restrict(spks,interval);
-        
-        binMatrix{i,1} = intervals{i,1};
-        [binMatrix{i,2}, bins] = SpikeTrain([spksi(:,1) spksi(:,4)],binSize,[interval(1,1) interval(end,end)],'nNeurons',nNeurons);
-        
-        matrix = binMatrix{i,2}';
-        binMatrix{i,2} = matrix(:,InIntervals(bins,interval));
+    binMatrix = struct([]);
+    for i = 1:size(intervals,2)
+        interval = intervals(i).times;
+        binMatrix(i).states = intervals(i).states;
+        binMatrix(i).learning = intervals(i).learning;
+
+        if size(interval,2) == 2
+            spksi = Restrict(spks,interval);
+            [binMatrix(i).data, bins] = SpikeTrain([spksi(:,1) spksi(:,4)],binSize,[interval(1,1) interval(end,end)],'nNeurons',nNeurons);
+
+            matrix = binMatrix(i).data';
+            binMatrix(i).data = matrix(:,InIntervals(bins,interval));
+        else 
+            binMatrix(i).data = BinArround(spks,interval,'nNeurons',nNeurons,'binSize',binSize);
+        end
         
         if zscr
-            binMatrix{i,2} = zscore(binMatrix{i,2},0,2);
+            binMatrix(i).data = zscore(binMatrix(i).data,0,2);
         end
     end
     

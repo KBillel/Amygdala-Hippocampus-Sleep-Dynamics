@@ -45,6 +45,8 @@ savevar = 'off';
 binSize = 0.025;
 force = true;
 
+
+
 % Parse options
 for i = 1:2:length(varargin),
 	if ~ischar(varargin{i}),
@@ -90,6 +92,8 @@ presleep=RunIntervals(pre);
 postsleep=RunIntervals(post);
 run=runintervals(2,:);
 
+
+
 % Load LFP and get detect peaks and troughs.
 lfp.all.rem = GetLFP(GetRippleChannel,'restrict',Rem);
 lfp.pre.rem = Restrict(lfp.all.rem,presleep);
@@ -98,9 +102,16 @@ lfp.post.rem = Restrict(lfp.all.rem,postsleep);
 [peaks.pre,troughs.pre] = DetectOscillationPeaks(lfp.pre.rem);
 [peaks.post,troughs.post] = DetectOscillationPeaks(lfp.post.rem);
 
+
+%Defining States for which the corrmatrix is going to be computed
+intervals_states = {'sws','sws','rem','rem','wake','rem_peaks','rem_peaks','rem_troughs','rem_troughs'};
+intervals_learning = {'pre','post','pre','post','run','pre','post','pre','post'};
+intervals_times = {Restrict(sws,presleep),Restrict(sws,postsleep),Restrict(Rem,presleep),Restrict(Rem,postsleep),run,peaks.pre.times(:,1),peaks.post.times(:,1),troughs.pre.times(:,1),troughs.post.times(:,1)};
+intervals = struct('states',intervals_states,'learning',intervals_learning,'times',intervals_times);
+
 % Load str.
 if ~strcmpi(str_name,'all')
-    str = eval(str);
+    str = eval(str);To
     str = str(str(:,1)==rat & str(:,2)==jour,:);
     Hpc = Hpc(Hpc(:,1)==rat & Hpc(:,2)==jour,:);
 end
@@ -112,25 +123,15 @@ metadata = [repmat(rat,nALL,1) repmat(jour,nALL,1) unique(spks.all(:,2:4),'rows'
 
 
 if strcmpi(str_name,'all')
-    
-    prerempeaks = {"prerempeaks" zscore(BinArround(spks.all,peaks.pre.times(:,1),'nNeurons',nALL,'binSize',binSize),0,2)};
-    preremtroughs = {"preremtroughs" zscore(BinArround(spks.all,troughs.pre.times(:,1),'nNeurons',nALL,'binSize',binSize),0,2)};
-    postrempeaks = {"postrempeaks" zscore(BinArround(spks.all,peaks.post.times(:,1),'nNeurons',nALL,'binSize',binSize),0,2)};
-    postremtroughs = {"postremtroughs" zscore(BinArround(spks.all,troughs.post.times(:,1),'nNeurons',nALL,'binSize',binSize),0,2)};
-
-    %binMatrix
-    intervals = {"presws" Restrict(sws,presleep) ; "postsws" Restrict(sws,postsleep) ; "run" run ; "prerem" Restrict(Rem,presleep) ; "postrem" Restrict(Rem,postsleep)};
     binMatrix = BinInIntervals(spks.all,intervals,'zscore',true,'binSize',binSize);
-    binMatrix = [binMatrix ; prerempeaks ; preremtroughs ; postrempeaks ; postremtroughs];
-
-    %corrMatrix 
-    corrMatrix = {};
-    for i = 1:size(binMatrix,1)
-        corrMatrix{i,1} = binMatrix{i,1};
-        [corrMatrix{i,2}, corrMatrix{i,3}] = corr(binMatrix{i,2}');
+    
+    corrMatrix = struct([]);
+    for i = 1:size(binMatrix,2)
+        corrMatrix(i).states = binMatrix(i).states;
+        corrMatrix(i).learning = binMatrix(i).learning;
+        [corrMatrix(i).corr, corrMatrix(i).pval] = corr(binMatrix(i).data');
     end
     
-    corrMatrix = cell2table(corrMatrix,'VariableNames',["Names" "Corr" "pVal"]);
     
     if strcmpi(savevar,'on')
         disp(['SAVING CorrMatrixAll_' num2str(binSize) '.mat'])

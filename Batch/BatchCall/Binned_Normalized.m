@@ -10,7 +10,7 @@
 % HPC_INT = StartBatch('D:\Matlab\Billel\Function\BinNormalized.m','D:\Matlab\Billel\Batch\GetSyncSpikesHPCInt.batch')
 % BLA_PYR = StartBatch('D:\Matlab\Billel\Function\BinNormalized.m','D:\Matlab\Billel\Batch\GetSyncSpikesBLAPyr.batch')
 % BLA_INT = StartBatch('D:\Matlab\Billel\Function\BinNormalized.m','D:\Matlab\Billel\Batch\GetSyncSpikesBLAInt.batch')
-
+% 
 % input = BLA_PYR;
 % 
 % BLA_PYR_ALL.activity = [];

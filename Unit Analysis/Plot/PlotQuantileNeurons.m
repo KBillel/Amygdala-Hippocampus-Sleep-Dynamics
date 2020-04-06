@@ -9,7 +9,7 @@ function [quantiled] = PlotQuantileNeurons(input,str,rat,show,L)
     neurons.metadata_pyr = input.metadata(pyr,:);
     neurons.metadata_int = input.metadata(int,:);
     
-    neurons.sum = sum(neurons.activity_pyr,2)
+    neurons.sum = sum(neurons.activity_pyr,2);
     q = quantile(neurons.sum,4);
     q = [0 q inf];
     

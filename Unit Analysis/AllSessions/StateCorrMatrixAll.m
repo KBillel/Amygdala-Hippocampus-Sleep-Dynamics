@@ -28,8 +28,8 @@ function [EV, REV] = StateCorrMatrixAll(str_name,binSize)
                 isStr2 = metadata(ismember(metadata(:,1:3),str2,'rows'),5);
                 
                 for j = 1:size(corrMatrix,1)
-                    corrMatrix.Corr{j} = corrMatrix.Corr{j}(isStr1,isStr2);
-                    corrMatrix.pVal{j} = corrMatrix.pVal{j}(isStr1,isStr2);
+                    corrMatrix(j).Corr{j} = corrMatrix(j).Corr(isStr1,isStr2);
+                    corrMatrix(j).pVal{j} = corrMatrix(j).pVal(isStr1,isStr2);
                 end
                 
             else

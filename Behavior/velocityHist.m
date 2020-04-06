@@ -1,4 +1,4 @@
-function [v] = velocityHist(session)
+function [v] = velocityHist(('Z:\Rat09\Rat09-20140326'))
 
 
 v = [];
