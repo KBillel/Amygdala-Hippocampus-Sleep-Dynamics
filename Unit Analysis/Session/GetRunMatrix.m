@@ -16,14 +16,23 @@ load('runintervals.mat')
 load('States.mat')
 
 
+
+intervals = runintervals;
+
+
+% Load spikes in the BLA.
 spks.all = SpksId(GetSpikes('output','full'))
-BLA = BLA(ismember(BLA(:,1:2),[rat jour],'rows'),:)
+BLA = BLA(ismember(Hpc(:,1:2),[rat jour],'rows'),:)
 spks.amy_all = spks.all(ismember(spks.all(:,2),BLA(:,3),'rows'),:);
-spks.amy_run = Restrict(spks.amy_all,sws)
+spks.amy_run = Restrict(spks.amy_all,intervals)
 spks.amy_run = SpksId(spks.amy_run)
 
-[Qrun,bins] = SpikeTrain([spks.amy_run(:,1) spks.amy_run(:,4)],binSize,[0 runintervals(end,end)]);
-isrun = InIntervals(bins,sws);
+
+AirpuffDistance = getAirpuffDistance(session);
+
+% Calulate Run matrix
+[Qrun,bins] = SpikeTrain([spks.amy_run(:,1) spks.amy_run(:,4)],binSize,[AirpuffDistance(1,1) AirpuffDistance(end,1)]);
+isrun = InIntervals(bins,intervals);
 Qrun = Qrun(isrun,:);
 
 imagesc(corrcoef(Qrun))
