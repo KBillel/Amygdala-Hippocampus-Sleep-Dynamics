@@ -2,6 +2,9 @@ function [binned events] = NREM_REM_ALL(session)
 %Author : Khouader Billel
 %BinNormalized : This function returns binned spikes for an entire
 %session with metadata for strct you want. 
+%Var: 
+%Session : Path to the session
+
 
 keep = 1;
 
