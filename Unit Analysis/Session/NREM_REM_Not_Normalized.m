@@ -1,5 +1,6 @@
-function [binned events] = NREM_REM_Not_Normalized(session,window)
-  
+function [neurons, events] = NREM_REM_Not_Normalized(session,binSize,windowSize,keep)
+
+    
     load('D:\Matlab\Billel\indexing.mat')
     load('Z:\All-Rats\AllRats-FinalType.mat')
     
@@ -18,7 +19,10 @@ function [binned events] = NREM_REM_Not_Normalized(session,window)
     spks = SpksId(spks);
 
     events = [];
-
+% This loop is to exctract from the data NREM-REM transition checking for 
+% REM > 50s
+% SMS> 50s
+% No interval between NREM and REM epochs (less than 2s)
     for i=1:length(sws(:,1))
         if (sws(i,2)-sws(i,1)>50)
             in = sws(i,2)+2;
@@ -34,27 +38,67 @@ function [binned events] = NREM_REM_Not_Normalized(session,window)
         return
     end
     
+    
+    
+    nBin = windowSize/binSize;
+    nBin = floor(nBin);
+    if nBin ~= windowSize/binSize
+        disp(['Could not make ' num2str(binSize) 's bins because of the size of the windows'])
+        binSize = windowSize/nBin;
+        disp(['Using ' num2str(binSize) 's instead'])
+    end
+    
+    
     neurons =  [];
     neurons.activity = [];
     neurons.metadata = [];
     neurons.metadatastr = ["Rat" "Jour" "Shank" "N" "Id" "Type"];
+    neurons.windowSize = windowSize;
+    neurons.binSize = binSize;
+    neurons.nBin = nBin;
+    
     idx = unique(spks(:,4));
     
+    
+
+    
     for i = 1:length(idx)
-        shank = unique(spks(spks(:,4) == idx(i),2));
-        clu = unique(spks(spks(:,4) == idx(i),3));
+        shank = unique(spks(spks(:,4) == i,2));
+        clu = unique(spks(spks(:,4) == i,3));
         type = finalType(ismember(finalType(:,1:4),[rat jour shank clu],'rows'),5);
         
-        metadata = [rat jour shank clu idx(i) type];
-       neurons.metadata = [neurons.metadata ; metadata];
+        metadata = [rat jour shank clu i type];
+        neurons.metadata = [neurons.metadata ; metadata];
        
-       for j = 1:size(events,1)
-           disp(metadata)
-           disp(events(j,:))
-       end
-       
+        for j = 1:size(events,1)
+%             disp(metadata);
+%             disp(events(j,:));
+           
+            win = windowSize/2;
+           
+            start = events(j,2)-win;
+            stop  = events(j,2)+win;
+            
+           
+            activity = Bin(spks(spks(:,4) == i,1),[start stop],nBin,'trim')';
+%             disp(activity) 
+            activity(isnan(activity)) = [];
+            firingRates = Accumulate(activity)/binSize';
+            if length(firingRates)~= nBin
+                firingRates(length(firingRates)+1:nBin,1) = 0;
+            end
+            
+            neurons.activity(:,i,j) = firingRates;
+           
+        end
        
     end
-        
+    
+    if keep == 1
+        mkdir('Billel/Transitions')
+        cd('Billel/Transitions')
+
+        save('NREM_REM_Not_Normalized','neurons','events')
+    end
 end
 

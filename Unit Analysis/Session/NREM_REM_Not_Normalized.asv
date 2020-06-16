@@ -1,5 +1,4 @@
-function [binned events] = NREM_REM_Not_Normalized(session,window)
-  
+function [binned events] = NREM_REM_Not_Normalized(session,binSize,windowSize)
     load('D:\Matlab\Billel\indexing.mat')
     load('Z:\All-Rats\AllRats-FinalType.mat')
     
@@ -18,7 +17,10 @@ function [binned events] = NREM_REM_Not_Normalized(session,window)
     spks = SpksId(spks);
 
     events = [];
-
+%This loop is to exctract from the data NREM-REM transition checking for 
+% REM > 50s
+% SMS> 50s
+% No interval between NREM and REM epochs (less than 2s)
     for i=1:length(sws(:,1))
         if (sws(i,2)-sws(i,1)>50)
             in = sws(i,2)+2;
@@ -38,15 +40,46 @@ function [binned events] = NREM_REM_Not_Normalized(session,window)
     neurons.activity = [];
     neurons.metadata = [];
     neurons.metadatastr = ["Rat" "Jour" "Shank" "N" "Id" "Type"];
-    idx = unique(spks(:,4))
+    idx = unique(spks(:,4));
+    
+    
+    nBin = windowSize/binSize;
+    nBin = floor(nBin);
+    if nBin ~= windowSize/binSize
+        disp(['Could not make ' num2str(binSize) 's bins because of the size of the windows'])
+        binSize = windowSize/nBin;
+        disp(['Using ' num2str(binSize) 's instead'])
+    end
     
     for i = 1:length(idx)
-        shank = unique(spks(spks(:,4) == idx(i),2));
-        clu = unique(spks(spks(:,4) == idx(i),3));
+        shank = unique(spks(spks(:,4) == i,2));
+        clu = unique(spks(spks(:,4) == i,3));
         type = finalType(ismember(finalType(:,1:4),[rat jour shank clu],'rows'),5);
         
-        
-       neurons.metadata = [neurons.metadata ; rat jour shank clu idx type]
+        metadata = [rat jour shank clu i type];
+        neurons.metadata = [neurons.metadata ; metadata];
+       
+        for j = 1:size(events,1)
+%             disp(metadata);
+%             disp(events(j,:));
+           
+            win = windowSize/2;
+           
+            start = events(j,2)-win
+            stop  = events(j,2)+win
+            
+           
+            activity = Bin(spks(spks(:,4) == 20,1),[start stop],nBin,'trim')';
+%             disp(activity) 
+            activity(isnan(activity)) = 0;
+            firingRate = Accumulate(activity)/binSize;
+           
+            disp(length(firingRate))   
+           
+        end
+       
+       
+    end
         
 end
 

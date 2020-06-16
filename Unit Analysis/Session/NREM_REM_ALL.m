@@ -6,7 +6,7 @@ function [binned events] = NREM_REM_ALL(session)
 %Session : Path to the session
 
 
-keep = 1;
+keep = 0;
 
 
 nSWS = 30;
